@@ -1,0 +1,27 @@
+# Core
+python==3.10
+numpy
+pandas
+scipy
+tqdm
+
+# Machine Learning
+scikit-learn
+scikit-optimize
+xgboost
+
+# Plotting and Visualisation
+matplotlib
+seaborn
+plotly
+matplotlib-venn
+logomaker
+py3Dmol
+
+# Structural Bioinformatics
+biopython
+
+# Jupyter
+jupyterlab
+ipykernel
+openpyxl
