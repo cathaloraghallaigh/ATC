@@ -56,5 +56,4 @@ If you use this repository or data, please cite:
 
 This project is licensed under the MIT License.
 You are free to use, modify, and distribute this work with appropriate attribution.
-See the LICENSE
- file for full terms.
+See the [LICENSE](./LICENSE) file for full terms.
