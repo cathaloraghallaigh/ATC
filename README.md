@@ -45,3 +45,10 @@ conda activate mtsenv
 If you use this repository or data, please cite:
 
 Ó Raghallaigh, C. (2025). From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences. ChemRxiv. https://doi.org/10.26434/chemrxiv-2025-mf4xs
+
+## License
+
+This project is licensed under the MIT License.
+You are free to use, modify, and distribute this work with appropriate attribution.
+See the LICENSE
+ file for full terms.
