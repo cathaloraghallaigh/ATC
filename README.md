@@ -33,13 +33,19 @@ The project integrates **structural bioinformatics** and **machine learning** to
 
 ---
 
-## Quick Start
+## Installation Options
 
-### 1. Create Environment
+**Option 1: Conda**
 ```bash
 conda env create -f environment.yml
 conda activate mtsenv
+
 ```
+**Option 2: Pip**
+```bash
+pip install -r requirements.txt
+```
+
 ## Citation
 
 If you use this repository or data, please cite:
