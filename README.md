@@ -5,9 +5,8 @@
 **Affiliation:** Manchester Institute of Biotechnology, The University of Manchester  
 **Preprint:** [ChemRxiv, 2025](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
 
-<img width="4678" height="1709" alt="WorkflowFigure0916" src="https://github.com/user-attachments/assets/27b563a6-022d-481a-9f1b-e444d9abb905" />
+<img width="3857" height="1403" alt="WorkflowFigure" src="https://github.com/user-attachments/assets/db2cb22a-a930-4fbf-a77e-5af1e36936f2" />
 
----
 
 ## Overview
 This repository provides all datasets and notebooks used in the ChemRxiv preprint *“From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences.”*  
