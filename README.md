@@ -5,7 +5,8 @@
 **Affiliation:** Manchester Institute of Biotechnology, The University of Manchester  
 **Preprint:** [ChemRxiv, 2025](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
 
-<img width="3857" height="1403" alt="WorkflowFigure" src="https://github.com/user-attachments/assets/db2cb22a-a930-4fbf-a77e-5af1e36936f2" />
+<img width="3862" height="1396" alt="Picture8" src="https://github.com/user-attachments/assets/52767163-5c5c-4168-a85f-185295d26b69" />
+
 
 
 ## Overview
