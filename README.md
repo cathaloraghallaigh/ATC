@@ -30,7 +30,7 @@ The project integrates **structural bioinformatics** and **machine learning** to
 | `CharacterisedSeqRef.csv` | Reference table of experimentally characterised sequences with functional annotation. | UniProt/GenBank accessions, enzyme names, and product class (linear/cyclic). |
 | `PreprintExtraLinLim.csv` | Supplementary dataset containing **additional linalool and limonene synthases** identified in **Samusevich *et al.* (2024)**. | Used for external validation and expanded chemical space assessment. |
 | `PreprintExtraLinLimData.csv` | Processed structural and physicochemical data corresponding to the above enzymes. | Extended feature-level validation set. |
-
+| 'Structures' folder | Contains the structures of all the mTS used for the main portion of the paper | PDB files of all structures used for the project |
 ---
 
 ## Installation Options
