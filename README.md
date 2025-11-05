@@ -1,8 +1,7 @@
 # From Pockets to Products  
 ### A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences
-**Authors:** Cathal Ó Raghallaigh, Nigel S. Scrutton, Sam Hay
-
-**Affiliation:** Manchester Institute of Biotechnology, The University of Manchester
+**Authors:** Cathal Ó Raghallaigh, Nigel S. Scrutton, Sam Hay  
+**Affiliation:** Manchester Institute of Biotechnology, The University of Manchester 
 
 [![DOI](https://img.shields.io/badge/DOI-10.26434%2Fchemrxiv--2025--mf4xs-brightgreen.svg)](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
 
