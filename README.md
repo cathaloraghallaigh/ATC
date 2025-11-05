@@ -1,36 +1,40 @@
 # From Pockets to Products  
 ### A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences
+**Authors:** Cathal Ó Raghallaigh, Nigel S. Scrutton, Sam Hay
 
-**Author:** Cathal Ó Raghallaigh  
-**Affiliation:** Manchester Institute of Biotechnology, The University of Manchester  
-**Preprint:** [ChemRxiv, 2025](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
+**Affiliation:** Manchester Institute of Biotechnology, The University of Manchester
+
+[![DOI](https://img.shields.io/badge/DOI-10.26434%2Fchemrxiv--2025--mf4xs-brightgreen.svg)](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
+
 
 <img width="3862" height="1396" alt="Picture8" src="https://github.com/user-attachments/assets/52767163-5c5c-4168-a85f-185295d26b69" />
 
-
-
-## Overview
+## Overview  
 This repository provides all datasets and notebooks used in the ChemRxiv preprint *“From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences.”*  
-The project integrates **structural bioinformatics** and **machine learning** to predict whether monoterpene synthases produce **linear or cyclic** products based on sequence- and structure-derived features.
+The project integrates **structural bioinformatics** and **machine learning** to predict whether monoterpene synthases produce **linear or cyclic** products using sequence- and structure-derived features.  
 
 ---
 
-## Notebooks and Datasets
+## Notebooks and Datasets  
 
- Notebook / Dataset | Description | Includes |
-|--------------------|--------------|-----------|
-| `LOOXGBoost.ipynb` | Leave-one-out cross-validation for the main XGBoost classification model. Implements stratified LOO-CV to assess model robustness and generalisation. | XGBoost model, accuracy metrics, confusion matrix, per-class performance. |
-| `BOXGBoost.ipynb` | Bayesian optimisation of XGBoost hyperparameters and feature group subsets for binary classification (linear vs cyclic). Evaluates combinations of structure-derived features to optimise accuracy and interpret key contributors.| Feature subgroup breakdown, group-wise addition, binary accuracy tracking, convergence plots. |
-| `TestOnPluskalDataset.ipynb` | External validation using the dataset from **Samusevich *et al.* (2024)**, *Structure-enabled enzyme function prediction unveils elusive terpenoid biosynthesis in archaea* ([bioRxiv, 2024.01.29.577750](https://doi.org/10.1101/2024.01.29.577750)). |Benchmarking of model prediction against unseen data from the Pluskal Lab. |
-| `StrucResCons.ipynb` | Performs structure-based residue conservation analysis by aligning multiple protein structures to a reference model and identifying corresponding residues based on spatial proximity. This enables comparison of active-site architecture across proteins independent of sequence alignment, providing insights into conserved structural motifs and residue distributions associated with catalytic or binding functions. | Structural alignment, spatial residue matching, conservation scoring, sequence logo generation, and per-protein mapping tables. |
-| `StatsScript.ipynb` | Statistical comparisons of feature distributions between enzyme classes. | Two-tailed t-tests, feature significance ranking, visual summaries. |
-| `FullDataset.csv` | Comprehensive main dataset used within project, of 88 experimentally characterised monoterpene synthases with active site structurally derived features. | Raw features used for model training and feature selection. |
-| `TestTrainSet.csv` | Training and test partition used for supervised model benchmarking. | 80/20 split for reproducible model comparison. |
-| `ValidationSet.csv` | Independent validation dataset containing enzymes not used in training or optimisation. | Unseen data used for evaluation of model generalisation. |
-| `CharacterisedSeqRef.csv` | Reference table of experimentally characterised sequences with functional annotation. | UniProt/GenBank accessions, enzyme names, and product class (linear/cyclic). |
-| `PreprintExtraLinLim.csv` | Supplementary dataset containing **additional linalool and limonene synthases** identified in **Samusevich *et al.* (2024)**. | Used for external validation and expanded chemical space assessment. |
-| `PreprintExtraLinLimData.csv` | Processed structural and physicochemical data corresponding to the above enzymes. | Extended feature-level validation set. |
-| 'Structures' folder | Contains the structures of all the mTS used for the main portion of the paper | PDB files of all structures used for the project |
+| Notebook / Dataset | Description | Includes |
+|--------------------|-------------|-----------|
+| `CharacterisedSeqRef.csv` | Reference table of characterised sequences. | UniProt/GenBank accessions, enzyme names, product class. |
+| `FullDataset.csv` | Full dataset of 88 characterised monoterpene synthases with active-site features. | Raw features for model training and selection. |
+| `TestTrainSet.csv` | Train-test partition, used for trainining of models. | 80% of full dataset. |
+| `ValidationSet.csv` | Independent validation dataset, used for assessing generalisation. | 20% of full dataset. |
+| `StatsScript.ipynb` | Statistical comparison of feature distributions between classes. | t-tests, significance ranking, visual summaries. |
+| `StrucResCons.ipynb` | Structure-based residue conservation analysis. Aligns multiple models to a reference and identifies spatially corresponding residues. | Structural alignment, conservation scoring, residue mapping, logo generation. |
+| `BOXGBoost.ipynb` | Bayesian optimisation of XGBoost hyperparameters and feature-group subsets. | Feature group addition, accuracy tracking, convergence plots. |
+| `BayesianOut.csv` | Output from Bayesian optimisation for feature set reduction | Model confidence and feature sets included |
+| `TestTrainEval.ipynb` | Trains and evaluates models using different feature sets on the test-train split data (80%) | Accuracy, confusion matrices, feature importance. |
+| `LogLoss.ipynb` | Tracks and visualises log-loss across iterations for Bayesian optimised feature set and the full feature set, to assess convergence and overfitting. | Per-iteration log-loss, convergence curves, summary statistics. |
+| `TestOnValidation.ipynb` | Trains and tests final models on an independent validation dataset containing unseen enzymes. | Validation metrics, misclassification tables, confusion matrices. |
+| `PreprintExtraLinLim.csv` | Additional linalool and limonene synthases from **Samusevich *et al.* (2024)**. | Extended validation. |
+| `PreprintExtraLinLimData.csv` | Processed structural and physicochemical data for the above. | Extended validation with data extracted. |
+| `TestOnPluskalDataset.ipynb` | External validation using **Samusevich *et al.* (2024)**, *bioRxiv* [2024.01.29.577750](https://doi.org/10.1101/2024.01.29.577750). | Benchmarking against unseen Pluskal Lab data. |
+| `Structures/` | Structures of all monoterpene synthases used in the study. | PDB files for all models, including folder 'Pockets', of active site pockets generated by FPocket |
+
 ---
 
 ## Installation Options
