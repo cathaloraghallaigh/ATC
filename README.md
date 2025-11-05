@@ -26,7 +26,7 @@ The project integrates **structural bioinformatics** and **machine learning** to
 | `StatsScript.ipynb` | Statistical comparisons of feature distributions between enzyme classes. | Two-tailed t-tests, feature significance ranking, visual summaries. |
 | `FullDataset.csv` | Comprehensive main dataset used within project, of 88 experimentally characterised monoterpene synthases with active site structurally derived features. | Raw features used for model training and feature selection. |
 | `TestTrainSet.csv` | Training and test partition used for supervised model benchmarking. | 80/20 split for reproducible model comparison. |
-| `ValidationSet.csv` | Independent validation dataset containing enzymes not used in training or optimisation. | Used for unbiased evaluation of model generalisation. |
+| `ValidationSet.csv` | Independent validation dataset containing enzymes not used in training or optimisation. | Unseen data used for evaluation of model generalisation. |
 | `CharacterisedSeqRef.csv` | Reference table of experimentally characterised sequences with functional annotation. | UniProt/GenBank accessions, enzyme names, and product class (linear/cyclic). |
 | `PreprintExtraLinLim.csv` | Supplementary dataset containing **additional linalool and limonene synthases** identified in **Samusevich *et al.* (2024)**. | Used for external validation and expanded chemical space assessment. |
 | `PreprintExtraLinLimData.csv` | Processed structural and physicochemical data corresponding to the above enzymes. | Extended feature-level validation set. |
