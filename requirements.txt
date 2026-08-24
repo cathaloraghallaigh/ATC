@@ -9,6 +9,7 @@ tqdm
 scikit-learn
 scikit-optimize
 xgboost
+shap
 
 # Plotting and Visualisation
 matplotlib
@@ -20,6 +21,12 @@ py3Dmol
 
 # Structural Bioinformatics
 biopython
+
+# Jupyter
+jupyterlab
+ipykernel
+nbconvert
+openpyxl
 
 # Jupyter
 jupyterlab
