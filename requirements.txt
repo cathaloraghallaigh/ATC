@@ -1,17 +1,16 @@
 # Core
-python==3.10
 numpy
 pandas
 scipy
 tqdm
 
-# Machine Learning
+# Machine learning
 scikit-learn
 scikit-optimize
 xgboost
 shap
 
-# Plotting and Visualisation
+# Plotting and visualisation
 matplotlib
 seaborn
 plotly
@@ -19,16 +18,11 @@ matplotlib-venn
 logomaker
 py3Dmol
 
-# Structural Bioinformatics
+# Structural bioinformatics
 biopython
 
-# Jupyter
+# Notebooks and data files
 jupyterlab
 ipykernel
 nbconvert
-openpyxl
-
-# Jupyter
-jupyterlab
-ipykernel
 openpyxl

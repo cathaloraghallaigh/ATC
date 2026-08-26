@@ -1,27 +1,29 @@
 name: mtsenv
+
 channels:
   - conda-forge
   - defaults
+
 dependencies:
   - python=3.10
   - numpy
   - pandas
-  - matplotlib
-  - seaborn
+  - scipy
+  - tqdm
   - scikit-learn
   - scikit-optimize
   - xgboost
+  - shap
+  - matplotlib
+  - seaborn
   - biopython
   - jupyterlab
-  - shap
-  - nbconvert  
   - ipykernel
-  - tqdm
-  - scipy
+  - nbconvert
   - openpyxl
   - pip
   - pip:
-      - logomaker
-      - matplotlib-venn
-      - py3Dmol
       - plotly
+      - matplotlib-venn
+      - logomaker
+      - py3Dmol
