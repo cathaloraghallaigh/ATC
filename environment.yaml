@@ -13,6 +13,8 @@ dependencies:
   - xgboost
   - biopython
   - jupyterlab
+  - shap
+  - nbconvert  
   - ipykernel
   - tqdm
   - scipy
