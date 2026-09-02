@@ -7,7 +7,7 @@ tqdm
 # Machine learning
 scikit-learn
 scikit-optimize
-xgboost
+xgboost==2.1.4
 shap
 
 # Plotting and visualisation

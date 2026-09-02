@@ -12,7 +12,7 @@ dependencies:
   - tqdm
   - scikit-learn
   - scikit-optimize
-  - xgboost
+  - xgboost=2.1.4
   - shap
   - matplotlib
   - seaborn

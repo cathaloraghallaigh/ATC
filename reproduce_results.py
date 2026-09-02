@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from dataclasses import dataclass
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -32,7 +34,7 @@ WORKFLOWS = {
         datasets=("TestTrainSet.csv", "ValidationSet.csv"),
     ),
     "loo": Workflow(
-        description="Run leave-one-out validation on the complete modelling dataset.",
+        description="Run leave-one-out validation on the training partition.",
         notebooks=("LOOXGBoost.ipynb", "analysis/LOOXGBoost.ipynb"),
         datasets=("FullDataset.csv",),
     ),
@@ -95,6 +97,16 @@ PLUSKAL_TRAINING_FILE = re.compile(
     r"^(\s*TRAIN_CSV\s*=\s*)(['\"])Dataset\.csv\2",
     flags=re.MULTILINE,
 )
+
+NUMBER = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)"
+
+RESULT_TITLES = {
+    "test_train": "Independent holdout",
+    "loo": "Leave-one-out validation",
+    "shap": "Repeated stratified five-fold validation",
+    "pluskal": "External Pluskal validation",
+    "loco": "Leave-one-cluster-out validation",
+}
 
 
 def repository_root() -> Path:
@@ -299,6 +311,209 @@ def execute_notebook(
     return executed
 
 
+def notebook_text_output(notebook: Path) -> str:
+    """Collect plain-text outputs from an executed notebook."""
+    document = json.loads(notebook.read_text(encoding="utf-8"))
+    text_outputs: list[str] = []
+
+    for cell in document.get("cells", []):
+        for output in cell.get("outputs", []):
+            if output.get("output_type") == "stream":
+                value = output.get("text", "")
+            else:
+                value = output.get("data", {}).get("text/plain", "")
+
+            if isinstance(value, list):
+                value = "".join(value)
+            if value:
+                text_outputs.append(str(value))
+
+    return "\n".join(text_outputs)
+
+
+def first_number(text: str, label_pattern: str) -> float | None:
+    match = re.search(
+        rf"(?:{label_pattern})\s*:\s*({NUMBER})",
+        text,
+        flags=re.IGNORECASE,
+    )
+    return float(match.group(1)) if match else None
+
+
+def score_as_percentage(value: float) -> str:
+    percentage = value * 100 if abs(value) <= 1 else value
+    return f"{percentage:.1f}%"
+
+
+def first_confusion_matrix(text: str) -> tuple[int, int, int, int] | None:
+    match = re.search(
+        r"\[\[\s*(\d+)[,\s]+(\d+)\s*\]\s*"
+        r"\[\s*(\d+)[,\s]+(\d+)\s*\]\]",
+        text,
+    )
+    return tuple(map(int, match.groups())) if match else None
+
+
+def metrics_from_confusion_matrix(
+    matrix: tuple[int, int, int, int],
+) -> tuple[float, float, float]:
+    tn, fp, fn, tp = matrix
+    total = tn + fp + fn + tp
+    accuracy = (tn + tp) / total
+    balanced_accuracy = (
+        tn / (tn + fp) + tp / (tp + fn)
+    ) / 2
+    denominator = math.sqrt(
+        (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)
+    )
+    mcc = (tp * tn - fp * fn) / denominator if denominator else 0.0
+    return accuracy, balanced_accuracy, mcc
+
+
+def repeated_metric(text: str, label: str, percentage: bool) -> str | None:
+    match = re.search(
+        rf"{re.escape(label)}\s*:\s*({NUMBER})\s*(?:\+/-|±)\s*({NUMBER})",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+
+    mean, standard_deviation = map(float, match.groups())
+    if percentage:
+        return (
+            f"{label}: {score_as_percentage(mean)} +/- "
+            f"{score_as_percentage(standard_deviation)}"
+        )
+    return f"{label}: {mean:.3f} +/- {standard_deviation:.3f}"
+
+
+def loco_summary(root: Path) -> list[str]:
+    metrics_file = (
+        root
+        / "SupplementaryInformation"
+        / "LOCO"
+        / "validation_outputs"
+        / "loco_metrics.csv"
+    )
+    if not metrics_file.is_file():
+        return []
+
+    lines = []
+    with metrics_file.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            try:
+                accuracy = score_as_percentage(float(row["Accuracy"]))
+                balanced = score_as_percentage(float(row["Balanced accuracy"]))
+                mcc = float(row["MCC"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            lines.append(
+                f"{row.get('Protocol', 'LOCO')}: accuracy {accuracy}; "
+                f"balanced accuracy {balanced}; MCC {mcc:.3f}"
+            )
+    return lines
+
+
+def headline_results(
+    workflow_name: str,
+    executed_notebook: Path,
+    root: Path,
+) -> list[str]:
+    """Extract a small, reader-facing result summary from each workflow."""
+    if workflow_name == "generate_loco_splits":
+        return []
+    if workflow_name == "loco":
+        return loco_summary(root)
+
+    text = notebook_text_output(executed_notebook)
+    if workflow_name == "shap":
+        marker = "Metrics across the ten complete repeats:"
+        section = text[text.rfind(marker):] if marker in text else text
+        return [
+            metric
+            for metric in (
+                repeated_metric(section, "Accuracy", percentage=True),
+                repeated_metric(section, "Balanced accuracy", percentage=True),
+                repeated_metric(section, "MCC", percentage=False),
+            )
+            if metric is not None
+        ]
+
+    if workflow_name == "test_train":
+        accuracy = first_number(text, r"Validation accuracy")
+        balanced = first_number(text, r"Balanced accuracy")
+        mcc = first_number(text, r"Matthews correlation coefficient|MCC")
+    elif workflow_name == "loo":
+        accuracy = first_number(text, r"Accuracy")
+        balanced = None
+        mcc = None
+    elif workflow_name == "pluskal":
+        accuracy = first_number(text, r"Test accuracy")
+        balanced = first_number(text, r"Balanced accuracy")
+        mcc = first_number(text, r"Matthews correlation coefficient|MCC")
+    else:
+        return []
+
+    matrix = first_confusion_matrix(text)
+    if matrix is not None:
+        matrix_accuracy, matrix_balanced, matrix_mcc = (
+            metrics_from_confusion_matrix(matrix)
+        )
+        accuracy = accuracy if accuracy is not None else matrix_accuracy
+        balanced = balanced if balanced is not None else matrix_balanced
+        mcc = mcc if mcc is not None else matrix_mcc
+
+    results = []
+    if accuracy is not None:
+        results.append(f"Accuracy: {score_as_percentage(accuracy)}")
+    if balanced is not None:
+        results.append(f"Balanced accuracy: {score_as_percentage(balanced)}")
+    if mcc is not None:
+        results.append(f"MCC: {mcc:.3f}")
+    if matrix is not None:
+        tn, fp, fn, tp = matrix
+        results.append(
+            "Confusion matrix [[TN, FP], [FN, TP]]: "
+            f"[[{tn}, {fp}], [{fn}, {tp}]]"
+        )
+    return results
+
+
+def print_headline_results(
+    workflow_name: str,
+    results: list[str],
+    executed_notebook: Path,
+    root: Path,
+) -> None:
+    title = RESULT_TITLES.get(workflow_name, workflow_name)
+    print(f"\n{title} - headline results")
+    if results:
+        for result in results:
+            print(f"  {result}")
+    else:
+        print("  See the executed notebook for the complete results.")
+    print(f"  Full output: {executed_notebook.relative_to(root)}")
+
+
+def save_results_summary(
+    summaries: list[tuple[str, list[str], Path]],
+    root: Path,
+) -> Path:
+    output = root / "reproduction_outputs" / "results_summary.txt"
+    lines = ["Published model analyses - headline results", ""]
+
+    for workflow_name, results, executed_notebook in summaries:
+        title = RESULT_TITLES.get(workflow_name, workflow_name)
+        lines.append(title)
+        lines.extend(f"  {result}" for result in results)
+        lines.append(f"  Full output: {executed_notebook.relative_to(root)}")
+        lines.append("")
+
+    output.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    return output
+
+
 def main() -> None:
     arguments = parse_arguments()
     root = repository_root()
@@ -349,11 +564,21 @@ def main() -> None:
 
     check_dependencies(selected)
     output_directory = root / "reproduction_outputs" / "executed_notebooks"
+    completed = []
+    summaries = []
     try:
-        completed = [
-            execute_notebook(notebook, name, root, output_directory, arguments.timeout)
-            for name, notebook in planned
-        ]
+        for name, notebook in planned:
+            executed = execute_notebook(
+                notebook,
+                name,
+                root,
+                output_directory,
+                arguments.timeout,
+            )
+            completed.append(executed)
+            results = headline_results(name, executed, root)
+            summaries.append((name, results, executed))
+            print_headline_results(name, results, executed, root)
     finally:
         for _, notebook in planned:
             pattern = f".{notebook.stem}.reproduction.*.ipynb"
@@ -363,6 +588,9 @@ def main() -> None:
     print("\nExecuted notebooks:")
     for notebook in completed:
         print(f"- {notebook.relative_to(root)}")
+
+    summary_file = save_results_summary(summaries, root)
+    print(f"\nHeadline results saved to {summary_file.relative_to(root)}")
 
 
 if __name__ == "__main__":
