@@ -65,9 +65,9 @@ The wider-monoterpene, sesquiterpene and structural-sensitivity notebooks are ru
 
 ## Citation
 
-If you use this repository or data, please cite:
+If you use this work, please cite the paper:
 
-Ó Raghallaigh, C. (2025). From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences. ChemRxiv. https://doi.org/10.26434/chemrxiv-2025-mf4xs
+Ó Raghallaigh, C., Scrutton, N. S. and Hay, S. (2026). From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences. *Digital Discovery*. https://doi.org/10.1039/D6DD00312E
 
 ## License
 
