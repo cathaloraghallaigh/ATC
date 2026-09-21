@@ -3,13 +3,13 @@
 **Authors:** Cathal Ó Raghallaigh, Nigel S. Scrutton, Sam Hay  
 **Affiliation:** Manchester Institute of Biotechnology, The University of Manchester 
 
-[![DOI](https://img.shields.io/badge/DOI-10.26434%2Fchemrxiv--2025--mf4xs-brightgreen.svg)](https://doi.org/10.26434/chemrxiv-2025-mf4xs)
+[![Paper DOI](https://img.shields.io/badge/Paper%20DOI-10.1039%2FD6DD00312E-blue)](https://doi.org/10.1039/D6DD00312E)
 
 
 <img width="3862" height="1396" alt="Picture8" src="https://github.com/user-attachments/assets/52767163-5c5c-4168-a85f-185295d26b69" />
 
 ## Overview  
-This repository provides all datasets and notebooks used in the ChemRxiv preprint *“From Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences.”*  
+This repository contains the datasets, notebooks and scripts associated with *Pockets to Products: A Data-Driven Framework for Classification of Monoterpene Synthase Product Preferences*, published in *Digital Discovery*. [Read the paper](https://doi.org/10.1039/D6DD00312E).
 The project integrates **structural bioinformatics** and **machine learning** to predict whether monoterpene synthases produce **linear or cyclic** products using sequence- and structure-derived features.  
 
 ---
